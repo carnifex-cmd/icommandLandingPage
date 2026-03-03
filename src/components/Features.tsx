@@ -15,12 +15,12 @@ const features = [
     },
     {
         title: "Universal Shell",
-        desc: "Seamless integration with Zsh, Bash, and Fish via a single binary. No complex config.",
+        desc: "Seamless integration with Zsh and Bash via a single binary. No complex config.",
         border: "border-b md:border-b-0 md:border-r",
     },
     {
         title: "Instant Results",
-        desc: "Written in Rust for blazingly fast startup and search times, even with massive histories.",
+        desc: "Built for fast startup and search times, even with massive histories.",
         border: "",
     },
 ];
