@@ -6,15 +6,11 @@ import TerminalWindow from "./TerminalWindow";
 
 const TYPEWRITER_TEXT = "docker compose down volume";
 const RESULTS = [
-    {
-        cmd: "docker-compose down -v --remove-orphans",
-        time: "3h ago",
-        active: true,
-    },
-    { cmd: "docker-compose down", time: "1d ago", active: false },
-    { cmd: "docker volume prune", time: "4d ago", active: false },
-    { cmd: "docker system prune -a --volumes", time: "1w ago", active: false },
-    { cmd: "podman-compose down -v", time: "2w ago", active: false },
+    { cmd: "docker-compose down -v --remove-orphans", path: "/Users/dev/projects/webapp", time: "3h ago" },
+    { cmd: "docker-compose down", path: "/Users/dev/projects/api-server", time: "1d ago" },
+    { cmd: "docker volume prune", path: "/Users/dev/projects/webapp", time: "4d ago" },
+    { cmd: "docker system prune -a --volumes", path: "/Users/dev/infra", time: "1w ago" },
+    { cmd: "podman-compose down -v", path: "/Users/dev/projects/legacy", time: "2w ago" },
 ];
 
 export default function TerminalDemo() {
@@ -22,20 +18,24 @@ export default function TerminalDemo() {
 
     useEffect(() => {
         let i = 0;
+        let timeout: ReturnType<typeof setTimeout>;
         setDisplayed("");
-        const interval = setInterval(() => {
+
+        const type = () => {
             if (i < TYPEWRITER_TEXT.length) {
                 setDisplayed(TYPEWRITER_TEXT.slice(0, i + 1));
                 i++;
+                timeout = setTimeout(type, 80);
             } else {
-                // Pause then restart
-                setTimeout(() => {
+                timeout = setTimeout(() => {
                     i = 0;
                     setDisplayed("");
+                    timeout = setTimeout(type, 400);
                 }, 2500);
             }
-        }, 80);
-        return () => clearInterval(interval);
+        };
+        timeout = setTimeout(type, 600);
+        return () => clearTimeout(timeout);
     }, []);
 
     return (
@@ -81,51 +81,50 @@ export default function TerminalDemo() {
                                 </div>
                             </div>
 
-                            {/* iCommand search overlay */}
-                            <div className="border border-[#333333] bg-[#0a0a0a] shadow-2xl relative z-10">
+                            {/* iCommand TUI overlay — matches real TUI */}
+                            <div className="border border-[#444444] bg-[#1a1a1a]/90 backdrop-blur shadow-2xl relative z-10 flex flex-col font-mono text-sm">
                                 {/* Search input */}
-                                <div className="p-3 border-b border-[#333333] flex gap-3">
-                                    <span className="text-[#eebd2b] font-bold">Find:</span>
-                                    <span className="text-white font-bold">
-                                        {displayed}
-                                        <span className="w-2 bg-white inline-block animate-pulse h-4 align-middle ml-0.5" />
-                                    </span>
+                                <div className="px-4 pt-3 pb-2">
+                                    <div className="border border-[#555555] bg-[#0d0d0d] px-4 py-2.5 flex items-center">
+                                        {displayed.length === 0 ? (
+                                            <span className="text-[#666666]">Type to search your command history…</span>
+                                        ) : (
+                                            <>
+                                                <span className="text-white font-bold">{displayed}</span>
+                                                <span className="w-2 h-4 bg-white inline-block animate-pulse ml-0.5" />
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
 
+                                {/* Divider */}
+                                <div className="border-t border-[#333333]" />
+
                                 {/* Results */}
-                                <div className="flex flex-col">
-                                    {RESULTS.map((r) => (
+                                <div className="flex flex-col flex-1 py-1">
+                                    {RESULTS.map((r, i) => (
                                         <div
                                             key={r.cmd}
-                                            className={`flex justify-between px-4 py-3 border-l-2 ${r.active
-                                                    ? "bg-[#eebd2b]/20 text-[#eebd2b] border-[#eebd2b]"
-                                                    : "text-gray-400 hover:bg-white/5 border-transparent"
+                                            className={`px-4 py-2 flex flex-col sm:flex-row sm:items-baseline justify-between ${i === 0 ? "bg-white/5" : "hover:bg-white/5"
                                                 } transition-colors`}
                                         >
-                                            <span className={r.active ? "font-bold" : "font-medium"}>
-                                                {r.cmd}
+                                            <div className="flex flex-col gap-0.5">
+                                                <span className="font-bold text-white">{r.cmd}</span>
+                                                <span className="text-xs text-[#666666]">{r.path}</span>
+                                            </div>
+                                            <span className="text-xs text-[#666666] font-mono mt-1 sm:mt-0 shrink-0">
+                                                {r.time}
                                             </span>
-                                            <span className="opacity-80 text-xs">{r.time}</span>
                                         </div>
                                     ))}
                                 </div>
 
-                                {/* Footer bar */}
-                                <div className="p-2 border-t border-[#333333] flex justify-between text-xs text-gray-500 bg-[#111111]">
-                                    <div className="flex gap-4">
-                                        <span>
-                                            <strong className="text-gray-300">RET</strong> run
-                                        </span>
-                                        <span>
-                                            <strong className="text-gray-300">TAB</strong> edit
-                                        </span>
-                                        <span>
-                                            <strong className="text-gray-300">^C</strong> cancel
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <span>5/892 results</span>
-                                    </div>
+                                {/* Keybindings footer */}
+                                <div className="border-t border-[#333333] px-4 py-2 flex gap-6 text-xs text-[#666666]">
+                                    <span><strong className="text-[#999999]">↑↓</strong> nav</span>
+                                    <span><strong className="text-[#999999]">↵</strong> select &amp; copy</span>
+                                    <span><strong className="text-[#999999]">Tab</strong> switch focus</span>
+                                    <span><strong className="text-[#999999]">Esc / q</strong> quit</span>
                                 </div>
                             </div>
                         </div>

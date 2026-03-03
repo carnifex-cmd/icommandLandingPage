@@ -2,6 +2,12 @@
 
 import { motion } from "framer-motion";
 
+const HERO_RESULTS = [
+    { cmd: "git reset --soft HEAD~1", path: "/Users/dev/projects/icommand", time: "2m ago" },
+    { cmd: "git revert HEAD", path: "/Users/dev/projects/legacy-app", time: "5m ago" },
+    { cmd: "git commit --amend", path: "/Users/dev/work/backend", time: "12m ago" },
+];
+
 export default function Hero() {
     return (
         <section className="min-h-[90vh] flex flex-col justify-center items-center px-6 py-20 relative pt-28">
@@ -18,71 +24,49 @@ export default function Hero() {
                     <span className="text-[#888888]">the way you think.</span>
                 </motion.h1>
 
-                {/* Terminal mockup */}
+                {/* TUI Mockup — matches the real iCommand TUI */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="w-full border border-[#333333] bg-[#111111] p-1"
+                    className="w-full border border-[#444444] bg-[#1a1a1a]/80 backdrop-blur font-mono text-sm shadow-2xl flex flex-col overflow-hidden"
                 >
-                    {/* Search bar */}
-                    <div className="flex items-center gap-3 px-3 py-3 border-b border-[#333333]">
-                        <span className="text-[#eebd2b] font-bold">➜</span>
-                        <span className="text-[#888888] font-bold">find</span>
-                        <span className="text-white font-bold">undo last git commit</span>
-                        <span className="cursor-blink w-2 h-5 bg-[#eebd2b] block" />
-                    </div>
-
-                    {/* Results */}
-                    <div className="flex flex-col">
-                        {/* Top result — highlighted */}
-                        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between px-3 py-2 bg-[#eebd2b]/10 text-[#eebd2b]">
-                            <div className="flex flex-col">
-                                <span className="font-bold text-[#eebd2b]">
-                                    git reset --soft HEAD~1
-                                </span>
-                                <span className="text-xs opacity-80 mt-1 text-[#eebd2b]/80">
-                                    ~/projects/icommand/src
-                                </span>
-                            </div>
-                            <span className="text-xs opacity-80 font-mono mt-1 sm:mt-0 text-[#eebd2b]">
-                                2m ago
-                            </span>
-                        </div>
-
-                        {/* Second result */}
-                        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between px-3 py-2 hover:bg-white/5 text-gray-400 transition-colors">
-                            <div className="flex flex-col">
-                                <span className="font-bold text-gray-300">git revert HEAD</span>
-                                <span className="text-xs opacity-70 mt-1 text-[#666666]">
-                                    ~/projects/legacy-app
-                                </span>
-                            </div>
-                            <span className="text-xs opacity-60 font-mono mt-1 sm:mt-0 text-[#666666]">
-                                2d ago
-                            </span>
-                        </div>
-
-                        {/* Third result */}
-                        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between px-3 py-2 hover:bg-white/5 text-gray-400 transition-colors">
-                            <div className="flex flex-col">
-                                <span className="font-bold text-gray-300">
-                                    git commit --amend
-                                </span>
-                                <span className="text-xs opacity-70 mt-1 text-[#666666]">
-                                    ~/work/backend
-                                </span>
-                            </div>
-                            <span className="text-xs opacity-60 font-mono mt-1 sm:mt-0 text-[#666666]">
-                                5d ago
-                            </span>
+                    {/* Search input */}
+                    <div className="px-4 pt-4 pb-3">
+                        <div className="border border-[#555555] bg-[#0d0d0d] px-4 py-3 flex items-center">
+                            <span className="text-white font-bold">undo last git commit</span>
+                            <span className="cursor-blink w-2 h-5 bg-[#eebd2b] ml-0.5 inline-block" />
                         </div>
                     </div>
 
-                    {/* Status bar */}
-                    <div className="flex justify-between items-center px-3 py-1 bg-[#333333]/30 text-[10px] uppercase tracking-wider text-[#888888] border-t border-[#333333]">
-                        <span>340 matches</span>
-                        <span>ENTER: execute</span>
+                    {/* Divider */}
+                    <div className="border-t border-[#333333]" />
+
+                    {/* Results list */}
+                    <div className="flex flex-col flex-1 py-2">
+                        {HERO_RESULTS.map((r, i) => (
+                            <div
+                                key={r.cmd}
+                                className={`px-4 py-2 flex flex-col sm:flex-row sm:items-baseline justify-between ${i === 0 ? "bg-white/5" : "hover:bg-white/5"
+                                    } transition-colors`}
+                            >
+                                <div className="flex flex-col gap-0.5">
+                                    <span className="font-bold text-white">{r.cmd}</span>
+                                    <span className="text-xs text-[#666666]">{r.path}</span>
+                                </div>
+                                <span className="text-xs text-[#666666] font-mono mt-1 sm:mt-0 shrink-0">
+                                    {r.time}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Keybindings footer */}
+                    <div className="border-t border-[#333333] px-4 py-2 flex gap-6 text-xs text-[#666666]">
+                        <span><strong className="text-[#999999]">↑↓</strong> nav</span>
+                        <span><strong className="text-[#999999]">↵</strong> select &amp; copy</span>
+                        <span><strong className="text-[#999999]">Tab</strong> switch focus</span>
+                        <span><strong className="text-[#999999]">Esc / q</strong> quit</span>
                     </div>
                 </motion.div>
 
