@@ -42,7 +42,7 @@ export default function HowItWorks() {
                     <span className="text-white">lsof -i :3000 | xargs kill</span>
                 </div>
             ),
-            desc: "icommand ranks historical commands by semantic similarity. Hit enter to run immediately.",
+            desc: "icommand ranks historical commands by semantic similarity. Hit enter to copy the command.",
         },
     ];
 

@@ -4,15 +4,64 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const INSTALL_CMD = "pipx install git+https://github.com/carnifex-cmd/iCommand.git";
+const INIT_CMD = "icommand init";
+const SEARCH_CMD = 'icommand search "npm run dev"';
 
-export default function InstallSection() {
+interface CommandBoxProps {
+    command: string;
+    showDollar?: boolean;
+}
+
+function CommandBox({ command, showDollar = false }: CommandBoxProps) {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = async () => {
         try {
-            await navigator.clipboard.writeText(INSTALL_CMD);
+            await navigator.clipboard.writeText(command);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
+        } catch {
+            // Fallback
+        }
+    };
+
+    return (
+        <div className="w-full border border-[#333333] p-4 bg-[#111111] flex justify-between items-center group relative">
+            <code className="text-[#eebd2b] text-sm font-bold break-all">
+                {showDollar && <span className="text-gray-500 mr-2">$</span>}
+                {command}
+            </code>
+            <button
+                aria-label="Copy to clipboard"
+                onClick={handleCopy}
+                className="text-gray-400 hover:text-white transition-colors ml-4 shrink-0"
+            >
+                {copied ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eebd2b" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+                        <rect x="9" y="9" width="13" height="13" rx="0" ry="0" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                )}
+            </button>
+            <div className="absolute -top-10 right-0 bg-[#eebd2b] text-black text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold pointer-events-none">
+                {copied ? "Copied!" : "Click to copy"}
+            </div>
+        </div>
+    );
+}
+
+export default function InstallSection() {
+    const [installCopied, setInstallCopied] = useState(false);
+
+    const handleInstallCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(INSTALL_CMD);
+            setInstallCopied(true);
+            setTimeout(() => setInstallCopied(false), 2000);
         } catch {
             // Fallback
         }
@@ -29,34 +78,65 @@ export default function InstallSection() {
             >
                 <h2 className="text-white font-bold text-xl">Get Started</h2>
 
-                {/* Primary install — pipx */}
-                <div className="w-full border border-[#333333] p-6 bg-[#111111] flex justify-between items-center group relative">
-                    <code className="text-[#eebd2b] text-sm sm:text-base font-bold break-all">
-                        {INSTALL_CMD}
-                    </code>
-                    <button
-                        aria-label="Copy to clipboard"
-                        onClick={handleCopy}
-                        className="text-gray-400 hover:text-white transition-colors ml-4 shrink-0"
-                    >
-                        {copied ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eebd2b" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                        ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
-                                <rect x="9" y="9" width="13" height="13" rx="0" ry="0" />
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                            </svg>
-                        )}
-                    </button>
-                    <div className="absolute -top-10 right-0 bg-[#eebd2b] text-black text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold pointer-events-none">
-                        {copied ? "Copied!" : "Click to copy"}
+                {/* Step 1: Install */}
+                <div className="w-full flex flex-col gap-3">
+                    <p className="text-sm text-gray-400">1. Install icommand using pipx</p>
+                    <div className="w-full border border-[#333333] p-6 bg-[#111111] flex justify-between items-center group relative">
+                        <code className="text-[#eebd2b] text-sm sm:text-base font-bold break-all">
+                            {INSTALL_CMD}
+                        </code>
+                        <button
+                            aria-label="Copy to clipboard"
+                            onClick={handleInstallCopy}
+                            className="text-gray-400 hover:text-white transition-colors ml-4 shrink-0"
+                        >
+                            {installCopied ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eebd2b" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+                                    <rect x="9" y="9" width="13" height="13" rx="0" ry="0" />
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                </svg>
+                            )}
+                        </button>
+                        <div className="absolute -top-10 right-0 bg-[#eebd2b] text-black text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold pointer-events-none">
+                            {installCopied ? "Copied!" : "Click to copy"}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Step 2: Initialize */}
+                <div className="w-full flex flex-col gap-3">
+                    <p className="text-sm text-gray-400">2. Initialize icommand</p>
+                    <CommandBox command={INIT_CMD} showDollar />
+                </div>
+
+                {/* Step 3: Usage options */}
+                <div className="w-full flex flex-col gap-3">
+                    <p className="text-sm text-gray-400">3. Start using icommand</p>
+                    <div className="border border-[#333333] bg-[#111111] p-4">
+                        <p className="text-sm text-gray-400 mb-3">
+                            Close your shell, start a new one, then type:
+                        </p>
+                        <code className="text-[#eebd2b] text-sm font-bold">
+                            $ <span className="text-white">ic</span>
+                        </code>
+                        <p className="text-xs text-gray-500 mt-2">to launch the TUI interface</p>
+                    </div>
+                    <p className="text-xs text-gray-500 text-center">— or —</p>
+                    <div className="border border-[#333333] bg-[#111111] p-4">
+                        <p className="text-sm text-gray-400 mb-3">
+                            Search for commands directly:
+                        </p>
+                        <CommandBox command={SEARCH_CMD} showDollar />
                     </div>
                 </div>
 
                 {/* Coming soon — brew & pip */}
-                <div className="w-full flex flex-col gap-3">
+                <div className="w-full flex flex-col gap-3 pt-4 border-t border-[#333333]">
+                    <p className="text-xs text-gray-500 uppercase tracking-wider">Alternative install methods</p>
                     <div className="w-full border border-[#333333]/50 p-4 bg-[#111111]/50 flex justify-between items-center opacity-40">
                         <code className="text-[#888888] text-sm font-bold">
                             brew install icommand
