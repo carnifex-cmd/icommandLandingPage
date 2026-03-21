@@ -9,16 +9,15 @@ export default function HowItWorks() {
             title: "> Trigger",
             terminal: (
                 <div className="bg-black border border-[#333333] p-4 text-xs mb-4 font-mono text-gray-400">
-                    ${" "}
+                    $ ic{" "}
                     <span className="cursor-blink bg-gray-400 w-2 h-4 inline-block align-middle ml-1" />
                 </div>
             ),
             desc: (
                 <>
-                    Press{" "}
-                    <span className="text-white bg-[#333333] px-1">Ctrl+S</span> anywhere
-                    in your terminal. The interface overlays instantly without context
-                    switching.
+                    Type{" "}
+                    <span className="text-white bg-[#333333] px-1">ic</span> in your
+                    terminal to open the TUI.
                 </>
             ),
         },
