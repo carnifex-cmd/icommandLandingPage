@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react"
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
@@ -37,6 +38,7 @@ export default function RootLayout({
         className={`${jetbrainsMono.variable} ${spaceGrotesk.variable} font-mono antialiased flex flex-col min-h-screen bg-background-dark text-white selection:bg-primary selection:text-black`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
