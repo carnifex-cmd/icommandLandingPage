@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-const INSTALL_CMD = "pipx install git+https://github.com/carnifex-cmd/iCommand.git";
+const INSTALL_CMD = "pipx install icommand-cli";
 const INIT_CMD = "icommand init";
 const SEARCH_CMD = 'icommand search "npm run dev"';
 
@@ -134,20 +134,17 @@ export default function InstallSection() {
                     </div>
                 </div>
 
-                {/* Coming soon — brew & pip */}
+                {/* Alternative install methods */}
                 <div className="w-full flex flex-col gap-3 pt-4 border-t border-[#333333]">
                     <p className="text-xs text-gray-500 uppercase tracking-wider">Alternative install methods</p>
-                    <div className="w-full border border-[#333333]/50 p-4 bg-[#111111]/50 flex justify-between items-center opacity-40">
-                        <code className="text-[#888888] text-sm font-bold">
-                            brew install icommand
+                    <div className="w-full border border-[#333333]/50 p-4 bg-[#111111]/50 flex justify-between items-center">
+                        <code className="text-[#eebd2b] text-sm font-bold">
+                            pip install icommand-cli
                         </code>
-                        <span className="text-xs text-[#555555] uppercase tracking-wider font-bold ml-4 shrink-0">
-                            coming soon
-                        </span>
                     </div>
                     <div className="w-full border border-[#333333]/50 p-4 bg-[#111111]/50 flex justify-between items-center opacity-40">
                         <code className="text-[#888888] text-sm font-bold">
-                            pip install icommand
+                            brew install icommand
                         </code>
                         <span className="text-xs text-[#555555] uppercase tracking-wider font-bold ml-4 shrink-0">
                             coming soon
